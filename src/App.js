@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { createContext, useReducer } from 'react';
 import './App.css';
 import Header from './components/Header';
 import TodoLists from './components/TodoLists';
@@ -45,6 +45,9 @@ function reducer(state,action){
   }
 }
 
+// context만들기 
+export const UserDispatch = createContext(null);
+
 function App() {
   //상태선언하기 reducer
   // const [state,dispatch] = useReducer(함수,초깃값); 초기값을 변수에 저장해둿다가 useReducer에 초기값으로 넣어줌
@@ -53,43 +56,45 @@ function App() {
   const {todos,input,id} = state; 
 
 
-  //인풋값 업데이트 요청 changeInput
-  const onChange = (e)=>{
-    dispatch({
-      type:'changeInput',  //action에 들어갈 객체를 만들어주는과정 type키에 changeinput
-      payload:e.target.value // payload키에 e.target.value // action.type action.payload 로 접근이 가능함
-    })
-  }
+  // //인풋값 업데이트 요청 changeInput
+  // const onChange = (e)=>{
+  //   dispatch({
+  //     type:'changeInput',  //action에 들어갈 객체를 만들어주는과정 type키에 changeinput
+  //     payload:e.target.value // payload키에 e.target.value // action.type action.payload 로 접근이 가능함
+  //   })
+  // }
 
-  //할일 항목추가 업데이트 요청 deleteTodo
-  const addTodo = ()=>{
-    dispatch({
-      type:'addTodo',
-      todo:{id:id , text:input , isDone:false}
-    })
-  }
+  // //할일 항목추가 업데이트 요청 deleteTodo
+  // const addTodo = ()=>{
+  //   dispatch({
+  //     type:'addTodo',
+  //     todo:{id:id , text:input , isDone:false}
+  //   })
+  // }
 
-  //할일 항목삭제 업데이트 요청 delTodo
-  const deleteTodo = (id)=>{
-    dispatch({
-      type:'deleteTodo',
-      id: id
-    })
-  }
+  // //할일 항목삭제 업데이트 요청 delTodo
+  // const deleteTodo = (id)=>{
+  //   dispatch({
+  //     type:'deleteTodo',
+  //     id: id
+  //   })
+  // }
 
-  //할일항목 isdone 토글 요청 toggleTodo
-  const toggleTodo = (id)=>{
-    dispatch({
-      type:"toggleTodo",
-      id:id
-    })
-  }
+  // //할일항목 isdone 토글 요청 toggleTodo
+  // const toggleTodo = (id)=>{
+  //   dispatch({
+  //     type:"toggleTodo",
+  //     id:id
+  //   })
+  // }
 
   return (
-    <div className="App">
-      <Header input={input} onChange={onChange} addTodo={addTodo}></Header>
-      <TodoLists todos={todos} toggleTodo={toggleTodo} deleteTodo={deleteTodo}></TodoLists>
-    </div>
+    <UserDispatch.Provider value={dispatch}>
+      <div className="App">
+        <Header input={input} id={id}></Header>
+        <TodoLists todos={todos}></TodoLists>
+      </div>
+    </UserDispatch.Provider>
   );
 }
 
